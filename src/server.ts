@@ -5,9 +5,6 @@ import app from './app';
 
 dotenv.config();
   
-// DB_PASS=zHuZQUrdnUC7pIKl
-// DB_USER=PH-TOUR-MANAGEMENT
-
 let server : Server ;
 
 const PORT = 5000;
