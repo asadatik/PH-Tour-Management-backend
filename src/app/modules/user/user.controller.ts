@@ -13,7 +13,7 @@ const  createUser = async (req : Request , res :  Response   ) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }  catch (error :any) {
-      console.log (error);
+      
       res.status(httpStatus.BAD_REQUEST).json({message : `somethings went wrong !! ${error.message}` , error }) 
         
     }
