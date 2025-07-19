@@ -4,7 +4,7 @@ import { User } from "./user.model";
 
 
 
-
+// create a new user
 const createUser = async (payload: Partial<IUser>) => {
     const { email, name } = payload;
 
@@ -20,7 +20,21 @@ const createUser = async (payload: Partial<IUser>) => {
 
 }
 
+const getAllUsers = async () => {
+    const users = await User.find({});
+ 
+    return {
+        users
+    }
+};
+
+
+
+
+
+
 export const UserServices = {
     createUser,
+    getAllUsers
     
 }

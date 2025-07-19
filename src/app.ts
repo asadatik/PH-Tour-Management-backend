@@ -1,6 +1,10 @@
-import express, {  Request, Response } from "express";
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import express, {  NextFunction, Request, Response } from "express";
 import cors from "cors";
 import { router } from "./app/routes";
+import { globalErrorHandler } from "./app/middlewares/globalerrorhandler";
+import notFound from "./app/middlewares/notfoundroute";
 
 
 
@@ -15,6 +19,13 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to library App");
 });
 
+
+// global error handler
+
+app.use(globalErrorHandler)
+
+// handle not found route   
+app.use(notFound)
 
 export default app;
 
