@@ -34,6 +34,9 @@ export const createUserZodSchema = z.object({
         .max(200, { message: "Address cannot exceed 200 characters." })
         .optional()
 })
+
+
+
 export const updateUserZodSchema = z.object({
     name: z
         .string({ error: "Name must be string" })
@@ -58,7 +61,7 @@ export const updateUserZodSchema = z.object({
         })
         .optional(),
     role: z
-        // .enum(["ADMIN", "GUIDE", "USER", "SUPER_ADMIN"])
+
         .enum(Object.values(Role) as [string])
         .optional(),
     isActive: z

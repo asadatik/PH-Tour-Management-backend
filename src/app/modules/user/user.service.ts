@@ -6,14 +6,24 @@ import { User } from "./user.model";
 
 // create a new user
 const createUser = async (payload: Partial<IUser>) => {
-    const { email, name } = payload;
+    const { email, ...rest} = payload;
+
+
+    // check if user already exists
+    const isUserExit = await User.findOne({ email });
+    if (isUserExit) {
+
+        throw new Error("User already exists with this email");
+    }
 
 
 
+
+
+    
     const user = await User.create({
         email,
-        name,
-
+       ...rest
     })
 
     return user
