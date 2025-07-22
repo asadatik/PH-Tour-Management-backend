@@ -21,9 +21,9 @@ const createUser = async (payload: Partial<IUser>) => {
 
     const hashedPassword = await bcryptjs.hash(password as string, 10)
 
-     const isHashed = await bcryptjs.compare( 'rrrrrrrrrrr', hashedPassword)  
+    //  const isHashed = await bcryptjs.compare( 'rrrrrrrrrrr', hashedPassword)  
     
-    console.log("isHashed", isHashed);
+    // console.log("isHashed", isHashed);
 
 
 
@@ -37,6 +37,7 @@ const createUser = async (payload: Partial<IUser>) => {
     
     const user = await User.create({
         email,
+        password: hashedPassword,
         auths : [authProvider],
        ...rest
     })
