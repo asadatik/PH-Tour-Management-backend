@@ -20,7 +20,9 @@ const credentialsLogin = async (payload : Partial<IUser>  ) => {
 
         throw new AppError(httpStatus.BAD_REQUEST, "Incorrect Password")
     }
+       return { email : isUserExist.email }
 
+ 
 }
 
 
