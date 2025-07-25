@@ -1,19 +1,19 @@
 /* eslint-disable no-console */
 import {Server} from "http"
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+;
 import app from './app';
 import { envVars } from "./app/config/env";
 
-dotenv.config();
-  
+
+
 let server : Server ;
 
 
 
 const startServer = async () => {
     try {
-        await mongoose.connect(envVars.DB_URL)
+        await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ldjypij.mongodb.net/assignment2?retryWrites=true&w=majority&appName=Cluster0`);
 
         console.log("Connected to DB!!");
 
@@ -27,8 +27,16 @@ const startServer = async () => {
 
 (async () => {
     await startServer()
-   
+    await import("./app/utils/superAdmin").then((module) => {
+        module.seedSuperAdmin();
+    }).catch((error) => {
+        
+        console.error("Error seeding super admin:", error);
+    });
 })()
+
+
+
 
 process.on("SIGTERM", () => {
     console.log("SIGTERM signal recieved... Server shutting down..");
