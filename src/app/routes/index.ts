@@ -12,7 +12,9 @@ const moduleRoutes = [
     {
         path : "/auth",
         route: AuthRoutes
-    }
+    } ,
+    // Add more module routes here as needed
+    
    
 ]
 

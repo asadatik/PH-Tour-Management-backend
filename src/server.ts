@@ -3,26 +3,32 @@ import {Server} from "http"
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import app from './app';
+import { envVars } from "./app/config/env";
 
 dotenv.config();
   
 let server : Server ;
 
-const PORT = 5000;
 
-async function main() {
+
+const startServer = async () => {
     try {
-        await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ldjypij.mongodb.net/TOUR-MANAGEMENT?retryWrites=true&w=majority&appName=Cluster0`);
-        console.log("Connected to MongoDB Using Mongoose!!!!!!!!!!!!");
-      server =  app.listen(PORT, () => {
-            console.log(`App is listening on port ${PORT}`);
+        await mongoose.connect(envVars.DB_URL)
+
+        console.log("Connected to DB!!");
+
+        server = app.listen(envVars.PORT, () => {
+            console.log(`Server is listening to port ${envVars.PORT}`);
         });
     } catch (error) {
         console.log(error);
     }
 }
 
-main()
+(async () => {
+    await startServer()
+   
+})()
 
 process.on("SIGTERM", () => {
     console.log("SIGTERM signal recieved... Server shutting down..");
