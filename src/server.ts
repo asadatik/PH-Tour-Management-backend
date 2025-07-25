@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 ;
 import app from './app';
 import { envVars } from "./app/config/env";
+import { seedSuperAdmin } from "./app/utils/superAdmin";
 
 
 
@@ -13,7 +14,7 @@ let server : Server ;
 
 const startServer = async () => {
     try {
-        await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ldjypij.mongodb.net/assignment2?retryWrites=true&w=majority&appName=Cluster0`);
+        await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ldjypij.mongodb.net/TOUR-MANAGEMENT?retryWrites=true&w=majority&appName=Cluster0`);
 
         console.log("Connected to DB!!");
 
@@ -27,14 +28,10 @@ const startServer = async () => {
 
 (async () => {
     await startServer()
-    await import("./app/utils/superAdmin").then((module) => {
-        module.seedSuperAdmin();
-    }).catch((error) => {
-        
-        console.error("Error seeding super admin:", error);
-    });
+   await seedSuperAdmin();
+    console.log("Super Admin seeded successfully!");
+    
 })()
-
 
 
 
