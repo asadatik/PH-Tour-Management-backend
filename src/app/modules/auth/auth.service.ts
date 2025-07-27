@@ -31,10 +31,13 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
 
     const refreshToken = generateToken(jwtPayload, envVars.JWT_REFRESH_SECRET, envVars.JWT_REFRESH_EXPIRES)
 
-    // You may want to return tokens or user info here
+    delete isUserExist.password; // Remove password from user object
+
+  
     return {
         accessToken,
-        refreshToken
+        refreshToken,
+        user: isUserExist
     }
 }
 
