@@ -22,7 +22,8 @@ interface EnvConfig {
 }
 
 const loadEnvVariables = (): EnvConfig => {
-  const requiredEnvVariables = ["PORT", "NODE_ENV"      , "SUPER_ADMIN_EMAIL" , "SUPER_ADMIN_PASSWORD"   ] as const;
+    const requiredEnvVariables: string[] = ["PORT", "DB_URL", "NODE_ENV", "JWT_ACCESS_EXPIRES", "JWT_ACCESS_SECRET", "SUPER_ADMIN_EMAIL", "SUPER_ADMIN_PASSWORD", "JWT_REFRESH_SECRET", "JWT_REFRESH_EXPIRES",];
+  // 💡 Use a more descriptive name for the function
 
   requiredEnvVariables.forEach((key) => {
     if (!process.env[key]) {
