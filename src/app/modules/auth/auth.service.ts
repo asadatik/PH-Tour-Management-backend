@@ -31,7 +31,9 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
 
     const refreshToken = generateToken(jwtPayload, envVars.JWT_REFRESH_SECRET, envVars.JWT_REFRESH_EXPIRES)
 
-    delete isUserExist.password; // Remove password from user object
+    // delete isUserExist.password; // Remove password from user object
+ 
+    isUserExist.password = undefined; // Ensure password is not returned
 
   
     return {
