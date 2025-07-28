@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import dotenv from "dotenv";
+import { Types } from "mongoose";
+import { Role } from "../modules/user/user.interface";
 dotenv.config();
 
 interface EnvConfig {
+  JWT_SECRET(jwtPayload: { _id: Types.ObjectId; role: Role; email: string; }, JWT_SECRET: any, JWT_EXPIRES: any): unknown;
   PORT: number; // 💡 better as number
   DB_URL: string;
   NODE_ENV: "development" | "production";

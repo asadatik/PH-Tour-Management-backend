@@ -17,10 +17,13 @@ export interface IAuthProvider {
 export enum IsActive {
     ACTIVE = "ACTIVE",
     INACTIVE = "INACTIVE",
-    BLOCKED = "BLOCKED"
+    BLOCKED = "BLOCKED",
+    DELETED = "DELETED"
 }
 
 export interface IUser {
+    _id?: Types.ObjectId;
+
     name: string;
     email: string;
     password?: string;

@@ -2,16 +2,28 @@ import AppError from "../../errorHelper/appError";
 import { User } from "../user/user.model";
 import httpStatus from "http-status-codes";
 import bcryptjs from "bcryptjs";
-import { IUser } from "../user/user.interface";
-import { envVars } from "../../config/env";
-import { generateToken } from "../../utils/jwt";
+import {  IUser } from "../user/user.interface";
 
+import { createNewAccessTokenWithRefreshToken, createUserTokens } from "../../utils/userTokens";
+
+
+/**
+ * AuthService handles authentication-related operations such as user login and token management.
+ * It provides methods for logging in with credentials and generating new access tokens using refresh tokens.
+ */
 
 const credentialsLogin = async (payload: Partial<IUser>) => {
     const { email, password } = payload;
-
+    if (!email || !password) {
+        throw new AppError(httpStatus.BAD_REQUEST, "Email and Password are required")
+    }
+    if (typeof email !== 'string' || typeof password !== 'string') {
+        throw new AppError(httpStatus.BAD_REQUEST, "Email and Password must be strings")
+    }
+    console.log("payload", payload);
 
     const isUserExist = await User.findOne({ email })
+
     if (!isUserExist) {
         throw new AppError(httpStatus.BAD_REQUEST, "Email does not exist")
     }
@@ -21,34 +33,38 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
     if (!isPasswordMatched) {
         throw new AppError(httpStatus.BAD_REQUEST, "Incorrect Password")
     }
+    
+   
+    const userTokens = createUserTokens(isUserExist)
 
-    const jwtPayload = {
-        userId: isUserExist._id,
-        email: isUserExist.email,
-        role: isUserExist.role
-    }
-    const accessToken = generateToken(jwtPayload, envVars.JWT_ACCESS_SECRET, envVars.JWT_ACCESS_EXPIRES)
+    // delete isUserExist.password;
 
-    const refreshToken = generateToken(jwtPayload, envVars.JWT_REFRESH_SECRET, envVars.JWT_REFRESH_EXPIRES)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: pass, ...rest } = isUserExist.toObject()
 
-    // delete isUserExist.password; // Remove password from user object
- 
-    isUserExist.password = undefined; // Ensure password is not returned
-
-  
     return {
-        accessToken,
-        refreshToken,
-        user: isUserExist
+        accessToken: userTokens.accessToken,
+        refreshToken: userTokens.refreshToken,
+        user: rest
     }
+
 }
 
+// // getNewAccestoken
 
 
+const getNewAccessToken = async (refreshToken: string) => {
+    const newAccessToken = await createNewAccessTokenWithRefreshToken(refreshToken)
 
+    return {
+        accessToken: newAccessToken
+    }
 
+}
 
 export const AuthServices = {
     credentialsLogin,
+    getNewAccessToken
+
 
 }
