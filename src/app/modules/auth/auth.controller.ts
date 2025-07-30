@@ -9,7 +9,21 @@ import AppError from "../../errorHelper/appError"
 
 const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
+   
+
    const loginInfo = await AuthServices.credentialsLogin(req.body) ;
+
+
+   // set the access token in cookies
+    res.cookie("accessToken", loginInfo.accessToken, {
+        httpOnly: true,
+        secure: false
+    })
+    // set the refresh token in cookies   
+        res.cookie("refreshToken", loginInfo.refreshToken, {
+            httpOnly: true, 
+               secure : false
+        } )
 
 
 
