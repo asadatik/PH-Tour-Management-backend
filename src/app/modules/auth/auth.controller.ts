@@ -5,6 +5,7 @@ import httpStatus from "http-status-codes"
 import { catchAsync } from "../../utils/catchAsync"
 import { sendResponse } from "../../utils/sendResponse"
 import { AuthServices } from "./auth.service"
+import AppError from "../../errorHelper/appError"
 
 const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
@@ -26,8 +27,14 @@ sendResponse(res, {
 
 const getNewAccestoken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
-    const refreshToken  = req.body.refreshToken;
-   const TokenInfo = await AuthServices.getNewAccestoken(refreshToken) ;
+    const refreshToken  = req.cookies.refreshToken || req.headers.authorization?.split(" ")[1];
+  
+    if (!refreshToken) {
+        throw new AppError(httpStatus.UNAUTHORIZED, "Refresh token is required")
+    }
+
+
+   const TokenInfo = await AuthServices.getNewAccessToken(refreshToken  as string); ;
 
 
 
@@ -45,5 +52,6 @@ sendResponse(res, {
 
 export const AuthControllers = {
     credentialsLogin,
+    getNewAccestoken
    
 }
