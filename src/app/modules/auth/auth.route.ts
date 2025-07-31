@@ -1,12 +1,18 @@
 import {  Router } from "express";
 
 import { AuthControllers } from "./auth.controller";
+import { checkAuth } from "../../middlewares/checkAuth";
+
+import { Role } from "../user/user.interface";
 
 const router = Router()
 
 router.post("/login", AuthControllers.credentialsLogin)
 router.post("/refresh-token", AuthControllers.getNewAccestoken)
 router.post("/logout", AuthControllers.logOutUser)
+router.post("/change-password", checkAuth(...Object.values(Role)) , AuthControllers.changePassword) // Assuming this is a placeholder for future implementation
+
+
 
 
 

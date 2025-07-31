@@ -7,6 +7,7 @@ import { sendResponse } from "../../utils/sendResponse"
 import { AuthServices } from "./auth.service"
 import AppError from "../../errorHelper/appError"
 import { setAuthCookie } from "../../utils/setCookie"
+import { JwtPayload } from "jsonwebtoken"
 
 const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
@@ -100,13 +101,33 @@ const logOutUser = catchAsync(async (req: Request, res: Response, next: NextFunc
 
 })
 
+// chang-password is a placeholder for future implementation
+
+const changePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+    const newPassword = req.body.newPassword;
+    const oldPassword = req.body.oldPassword;
+    const decodedToken = req.user
+
+    await AuthServices.resetPassword(oldPassword, newPassword, decodedToken as JwtPayload);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Password Changed .......... Successfully",
+        data: null,
+    })
+})
+
 
 // Exporting the controllers
+
 
 
 export const AuthControllers = {
     credentialsLogin,
     getNewAccestoken ,
-    logOutUser
+    logOutUser,
+    changePassword
    
 }

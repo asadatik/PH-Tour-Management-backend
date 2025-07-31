@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import AppError from "../../errorHelper/appError";
 import { User } from "../user/user.model";
 import httpStatus from "http-status-codes";
@@ -5,12 +6,11 @@ import bcryptjs from "bcryptjs";
 import {  IUser } from "../user/user.interface";
 
 import { createNewAccessTokenWithRefreshToken, createUserTokens } from "../../utils/userTokens";
+import { envVars } from "../../config/env";
+import { JwtPayload } from "jsonwebtoken";
 
 
-/**
- * AuthService handles authentication-related operations such as user login and token management.
- * It provides methods for logging in with credentials and generating new access tokens using refresh tokens.
- */
+
 
 const credentialsLogin = async (payload: Partial<IUser>) => {
     const { email, password } = payload;
@@ -62,9 +62,35 @@ const getNewAccessToken = async (refreshToken: string) => {
 
 }
 
+// changePassword 
+
+const resetPassword = async (oldPassword: string, newPassword: string, decodedToken: JwtPayload) => {
+
+    const user = await User.findById(decodedToken.userId)
+
+
+    const isOldPasswordMatch = await bcryptjs.compare(oldPassword, user!.password as string)
+    if (!isOldPasswordMatch) {
+        throw new AppError(httpStatus.UNAUTHORIZED, "Old Password does not match");
+    }
+
+    user!.password = await bcryptjs.hash(newPassword, Number(envVars.BCRYPT_SALT_ROUND))
+
+    user!.save();
+
+
+}
+
+
+
+
+
+
 export const AuthServices = {
     credentialsLogin,
-    getNewAccessToken
+    getNewAccessToken ,
+    resetPassword
+
 
 
 }
