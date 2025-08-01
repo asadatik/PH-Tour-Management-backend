@@ -14,9 +14,10 @@ router.post("/logout", AuthControllers.logOutUser)
 router.post("/change-password", checkAuth(...Object.values(Role)) , AuthControllers.changePassword) // Assuming this is a placeholder for future implementation
 
 router.get("/google", async (req: Request, res: Response, next: NextFunction) => {
-
-    passport.authenticate("google", { scope: ["profile", "email"] })(req, res , next);
+    const redirect = req.query.redirect || "/"  
+     passport.authenticate("google", { scope: ["profile", "email"], state: redirect as string })(req, res, next)
 })
+
 
 // api/v1/auth/google/callback?state=/booking
 router.get("/google/callback", passport.authenticate("google",    passport.authenticate("google", { failureRedirect: "/login" }),    AuthControllers.googleCallbackController) )

@@ -8,6 +8,8 @@ import { AuthServices } from "./auth.service"
 import AppError from "../../errorHelper/appError"
 import { setAuthCookie } from "../../utils/setCookie"
 import { JwtPayload } from "jsonwebtoken"
+import { createUserTokens } from "../../utils/userTokens"
+import { envVars } from "../../config/env"
 
 const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
@@ -124,14 +126,25 @@ const changePassword = catchAsync(async (req: Request, res: Response, next: Next
 
 // googleCallbackController
 const googleCallbackController = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const redirectUrl = req.query.state as string || "/";
+    let redirectTo = req.query.state ? req.query.state as string : ""
+    if (redirectTo.startsWith("/")) {
+        redirectTo = redirectTo.slice(1)
+    }
 
-    // set the access token in cookies
-    setAuthCookie(res, req.user);
 
-    // redirect to the frontend URL with the redirect path
-    res.redirect(`${process.env.FRONTEND_URL}${redirectUrl}`);
+    const user = req.user;
+
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, "User Not Found")
+    }
+
+    const tokenInfo = createUserTokens(user)
+
+    setAuthCookie(res, tokenInfo)
+
+    res.redirect(`${envVars.FRONTEND_URL}/${redirectTo}`)
 })
+
 
 
 export const AuthControllers = {
