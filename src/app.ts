@@ -6,10 +6,21 @@ import { router } from "./app/routes";
 import { globalErrorHandler } from "./app/middlewares/globalerrorhandler";
 import notFound from "./app/middlewares/notfoundroute";
 import cookieParser from "cookie-parser";
-
+import passport from "passport";
+import expressSession from "express-session";
 
 const app  = express();
 
+app.use(expressSession(
+    {
+        secret: "secret",
+        resave: false,
+        saveUninitialized: true, }
+
+))
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(cookieParser());
 app.use(cors())
