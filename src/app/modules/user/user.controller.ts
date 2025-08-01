@@ -49,12 +49,7 @@ const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFun
 
     setAuthCookie(res, tokenInfo)
 
-    // sendResponse(res, {
-    //     success: true,
-    //     statusCode: httpStatus.OK,
-    //     message: "Password Changed Successfully",
-    //     data: null,
-    // })
+
 
     res.redirect(envVars.FRONTEND_URL)
 })
