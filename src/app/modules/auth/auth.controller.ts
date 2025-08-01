@@ -120,8 +120,18 @@ const changePassword = catchAsync(async (req: Request, res: Response, next: Next
 })
 
 
-// Exporting the controllers
 
+
+// googleCallbackController
+const googleCallbackController = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const redirectUrl = req.query.state as string || "/";
+
+    // set the access token in cookies
+    setAuthCookie(res, req.user);
+
+    // redirect to the frontend URL with the redirect path
+    res.redirect(`${process.env.FRONTEND_URL}${redirectUrl}`);
+})
 
 
 export const AuthControllers = {
@@ -129,5 +139,6 @@ export const AuthControllers = {
     getNewAccestoken ,
     logOutUser,
     changePassword
+    , googleCallbackController
    
 }

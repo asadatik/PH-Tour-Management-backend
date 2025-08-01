@@ -6,6 +6,10 @@ import httpStatus from 'http-status-codes';
 import { UserServices } from "./user.service";
 import { sendResponse } from "../../utils/sendResponse";
 import { catchAsync } from "../../utils/catchAsync";
+import AppError from "../../errorHelper/appError";
+import { createUserTokens } from "../../utils/userTokens";
+import { setAuthCookie } from "../../utils/setCookie";
+import { envVars } from "../../config/env";
 
 
 const createUser = async (req: Request, res: Response  , next : NextFunction) => {
@@ -34,20 +38,25 @@ const createUser = async (req: Request, res: Response  , next : NextFunction) =>
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const result = await UserServices.getAllUsers();
 
-    // res.status(httpStatus.OK).json({
+   const user = req.user;
+
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, "User Not Found")
+    }
+
+    const tokenInfo = createUserTokens(user)
+
+    setAuthCookie(res, tokenInfo)
+
+    // sendResponse(res, {
     //     success: true,
-    //     message: "All Users Retrieved Successfully",
-    //     data: users
+    //     statusCode: httpStatus.OK,
+    //     message: "Password Changed Successfully",
+    //     data: null,
     // })
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.CREATED,
-        message: "All Users Retrieved Successfully",
-        data: result.data,
-        meta: result.meta
-    })
+
+    res.redirect(envVars.FRONTEND_URL)
 })
 
 
