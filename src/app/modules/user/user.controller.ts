@@ -36,24 +36,17 @@ const createUser = async (req: Request, res: Response  , next : NextFunction) =>
 }
 
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-
-   const user = req.user;
-
-    if (!user) {
-        throw new AppError(httpStatus.NOT_FOUND, "User Not Found")
-    }
-
-    const tokenInfo = createUserTokens(user)
-
-    setAuthCookie(res, tokenInfo)
-
-
-
-    res.redirect(envVars.FRONTEND_URL)
-})
-
+// get all users
+const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+  const users = await UserServices.getAllUsers();
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Users fetched successfully",
+    data: users.data,
+    meta: users.meta
+  });
+});
 
 
 export const UserControllers = {

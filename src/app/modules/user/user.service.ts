@@ -14,10 +14,11 @@ const createUser = async (payload: Partial<IUser>) => {
 
     // check if user already exists
     const isUserExit = await User.findOne({ email });
-    if (isUserExit) {
+    
+    // if (isUserExit) {
 
-        throw new Error("User already exists with this email");
-    }
+    //     throw new Error("User already exists with this email");
+    // }
 
 
     const hashedPassword = await bcryptjs.hash(password as string, 10)
@@ -55,6 +56,8 @@ const getAllUsers = async () => {
         }
     }
 };
+
+
 
 /////////  updated user ////
 const updateUser = async (userId: string, payload: Partial<IUser>, decodedToken: JwtPayload) => {
