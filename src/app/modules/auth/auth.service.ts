@@ -3,52 +3,53 @@ import AppError from "../../errorHelper/appError";
 import { User } from "../user/user.model";
 import httpStatus from "http-status-codes";
 import bcryptjs from "bcryptjs";
-import {  IUser } from "../user/user.interface";
 
-import { createNewAccessTokenWithRefreshToken, createUserTokens } from "../../utils/userTokens";
+
+import { createNewAccessTokenWithRefreshToken } from "../../utils/userTokens";
 import { envVars } from "../../config/env";
 import { JwtPayload } from "jsonwebtoken";
 
 
 
 
-const credentialsLogin = async (payload: Partial<IUser>) => {
-    const { email, password } = payload;
-    if (!email || !password) {
-        throw new AppError(httpStatus.BAD_REQUEST, "Email and Password are required")
-    }
-    if (typeof email !== 'string' || typeof password !== 'string') {
-        throw new AppError(httpStatus.BAD_REQUEST, "Email and Password must be strings")
-    }
-    console.log("payload", payload);
+// const credentialsLogin = async (payload: Partial<IUser>) => {
+//     const { email, password } = payload;
+//     if (!email || !password) {
+//         throw new AppError(httpStatus.BAD_REQUEST, "Email and Password are required")
+//     }
+//     if (typeof email !== 'string' || typeof password !== 'string') {
+//         throw new AppError(httpStatus.BAD_REQUEST, "Email and Password must be strings")
+//     }
+//     console.log("payload", payload);
 
-    const isUserExist = await User.findOne({ email })
+//     const isUserExist = await User.findOne({ email })
 
-    if (!isUserExist) {
-        throw new AppError(httpStatus.BAD_REQUEST, "Email does not exist")
-    }
+//     if (!isUserExist) {
+//         throw new AppError(httpStatus.BAD_REQUEST, "Email does not exist")
+//     }
 
-    const isPasswordMatched = await bcryptjs.compare(password as string, isUserExist.password as string)
+//     const isPasswordMatched = await bcryptjs.compare(password as string, isUserExist.password as string)
 
-    if (!isPasswordMatched) {
-        throw new AppError(httpStatus.BAD_REQUEST, "Incorrect Password")
-    }
+//     if (!isPasswordMatched) {
+//         throw new AppError(httpStatus.BAD_REQUEST, "Incorrect Password")
+//     }
     
    
-    const userTokens = createUserTokens(isUserExist)
+//     const userTokens = createUserTokens(isUserExist)
 
-    // delete isUserExist.password;
+//     // delete isUserExist.password;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: pass, ...rest } = isUserExist.toObject()
+  
+//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+//     const { password: pass, ...rest } = isUserExist.toObject()
 
-    return {
-        accessToken: userTokens.accessToken,
-        refreshToken: userTokens.refreshToken,
-        user: rest
-    }
+//     return {
+//         accessToken: userTokens.accessToken,
+//         refreshToken: userTokens.refreshToken,
+//         user: rest
+//     }
 
-}
+// }
 
 // // getNewAccestoken
 
@@ -87,7 +88,7 @@ const resetPassword = async (oldPassword: string, newPassword: string, decodedTo
 
 
 export const AuthServices = {
-    credentialsLogin,
+    
     getNewAccessToken ,
     resetPassword
 
