@@ -11,6 +11,12 @@ import { handlerValidationError } from "../helpers/handlerValidationError"
 
 export const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
 
+      if (envVars.NODE_ENV === "development") {
+        console.log(err);
+    }
+
+
+
     
         let errorSources: TErrorSources[] = []
     let statusCode = 500
