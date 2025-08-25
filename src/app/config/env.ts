@@ -19,10 +19,38 @@ interface EnvConfig {
     EXPRESS_SESSION_SECRET: string
     FRONTEND_URL: string
 
+    REDIS_HOST: string;
+    REDIS_PORT: string;
+    REDIS_USERNAME: string;
+    REDIS_PASSWORD: string;
+
+
+
 }
 
 const loadEnvVariables = (): EnvConfig => {
-    const requiredEnvVariables: string[] = ["PORT", "DB_URL", "NODE_ENV", "BCRYPT_SALT_ROUND", "JWT_ACCESS_EXPIRES", "JWT_ACCESS_SECRET", "SUPER_ADMIN_EMAIL", "SUPER_ADMIN_PASSWORD", "JWT_REFRESH_SECRET", "JWT_REFRESH_EXPIRES", "GOOGLE_CLIENT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CALLBACK_URL", "EXPRESS_SESSION_SECRET", "FRONTEND_URL"];
+    const requiredEnvVariables: string[] =
+        ["PORT",
+            "DB_URL",
+            "NODE_ENV",
+            "BCRYPT_SALT_ROUND",
+            "JWT_ACCESS_EXPIRES",
+            "JWT_ACCESS_SECRET",
+            "SUPER_ADMIN_EMAIL",
+            "SUPER_ADMIN_PASSWORD",
+            "JWT_REFRESH_SECRET",
+            "JWT_REFRESH_EXPIRES",
+            "GOOGLE_CLIENT_SECRET",
+            "GOOGLE_CLIENT_ID",
+            "GOOGLE_CALLBACK_URL",
+            "EXPRESS_SESSION_SECRET",
+            "FRONTEND_URL"
+            , "REDIS_HOST",
+            "REDIS_PORT",
+            "REDIS_USERNAME",
+            "REDIS_PASSWORD",
+
+        ];
 
     requiredEnvVariables.forEach(key => {
         if (!process.env[key]) {
