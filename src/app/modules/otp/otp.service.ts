@@ -1,8 +1,10 @@
 import crypto from "crypto";
 import { redisClient } from "../../config/redis.config";
-import AppError from "../../errorHelpers/AppError";
-import { sendEmail } from "../../utils/sendEmail";
+
+
 import { User } from "../user/user.model";
+import AppError from "../../errorHelper/appError";
+import { sendEmail } from "../../utils/sendEmail";
 const OTP_EXPIRATION = 2 * 60 // 2minute
 
 const generateOtp = (length = 6) => {
