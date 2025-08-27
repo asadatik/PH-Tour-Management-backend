@@ -1,7 +1,5 @@
 import crypto from "crypto";
 import { redisClient } from "../../config/redis.config";
-
-
 import { User } from "../user/user.model";
 import AppError from "../../errorHelper/appError";
 import { sendEmail } from "../../utils/sendEmail";
@@ -16,6 +14,7 @@ const generateOtp = (length = 6) => {
     return otp
 }
 
+//send
 const sendOTP = async (email: string, name: string) => {
 
     const user = await User.findOne({ email })
@@ -49,6 +48,8 @@ const sendOTP = async (email: string, name: string) => {
     })
 };
 
+
+//verify
 const verifyOTP = async (email: string, otp: string) => {
     // const user = await User.findOne({ email, isVerified: false })
     const user = await User.findOne({ email })

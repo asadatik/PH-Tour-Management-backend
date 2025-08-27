@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ejs from "ejs";
 import nodemailer from "nodemailer";
@@ -37,6 +38,7 @@ export const sendEmail = async ({
     attachments
 }: SendEmailOptions) => {
     try {
+        console.log(to , 'frrrrrr')
         const templatePath = path.join(__dirname, `templates/${templateName}.ejs`)
         const html = await ejs.renderFile(templatePath, templateData)
         const info = await transporter.sendMail({
