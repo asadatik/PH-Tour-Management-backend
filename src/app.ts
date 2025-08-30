@@ -8,7 +8,7 @@ import notFound from "./app/middlewares/notfoundroute";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import expressSession from "express-session";
-import "./app/config/passport"; // Ensure passport strategies are loaded
+import "./app/config/passport";
 
 
 
@@ -25,7 +25,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(cookieParser());
-app.use(cors())
+
+//
+
+app.use( cors({
+    origin: "http://localhost:5173", // frontend url explicitly দিতে হবে
+    credentials: true, // cookie/auth header পাঠানোর জন্য
+  })   )
+
 app.use(express.json())
 
 
